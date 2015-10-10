@@ -6,7 +6,7 @@ I have already wrote a basic _check_mk_ TextSecure notification plugin. But now,
 
 Go and get [janimo's](https://github.com/janimo/textsecure) TextSecure client. Check his wiki on how to get a working binary.
 
-As i'm a lazy bastard, the HTTP gateway potion was a quick&dirty hack for some devices which can't do proper SSH. However, you need PHP and a webserver to serve the page.
+As i'm a lazy bastard, the HTTP gateway potion was a quick&dirty PHP hack for some devices which can't do proper SSH. PHP was already running on one of my devices, so i'd choose it. Basically it just does an ugly system exec, you might also use CGI instead.
 
 ## Setup
 
@@ -16,7 +16,14 @@ Please follow janimo's wiki on how to setup the client properly. You then need t
 
 ## HTTP
 
+### PHP
+
 Just serve the _index.php_ file with a webserver and you should be able to use it. You might want to add some SSL setup and basic authentication to avoid spamming ;)
+
+### CGI
+
+* [Apache2](http://httpd.apache.org/docs/2.2/howto/cgi.html)
+* [NGINX](https://www.nginx.com/resources/wiki/start/topics/examples/fcgiwrap/)
 
 ## SSH (preferred!)
 
@@ -28,6 +35,14 @@ As SSH adds an authentication and encryption layer to the whole thing, i'm using
 
 ```
 curl --data "from=someone&to=account.from.your.textsecure.address.book.or.phone.number&message=\"this is your message\"" http(s)://yourserver.example.com/textsecure-gateway/index.php
+```
+
+### CGI
+
+Just needs a modified URL which points at your previously configured _cgi-bin_ directory. Example could be:
+
+```
+curl --data "from=someone&to=account.from.your.textsecure.address.book.or.phone.number&message=\"this is your message\"" http(s)://yourserver.example.com/cgi-bin/textsecure-gateway/index.php
 ```
 
 ### SSH
