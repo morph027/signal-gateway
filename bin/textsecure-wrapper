@@ -1,0 +1,58 @@
+#!/bin/bash
+
+SCRIPT=`basename ${BASH_SOURCE[0]}`
+ARGS=$(getopt --long "to:,message:,from:,attachment:" --options "" -n "$SCRIPT" -- "$@");
+
+#Bad arguments
+if [ $? -ne 0 ];
+then
+  exit 1
+fi
+
+eval set -- "$ARGS";
+
+while true; do
+  case "$1" in
+    --from)
+          shift
+          FROM=$1
+          shift
+    ;;
+    --to)
+          shift
+          TO=$1
+          shift
+    ;;
+    --message)
+          shift
+          MESSAGE="$1"
+          shift
+    ;;
+    --attachment)
+          shift
+          ATTACHMENT=$1
+          shift
+    ;;
+    --)
+      shift
+      break
+    ;;
+    *)
+      exit 1
+    ;;
+  esac
+done
+
+# check vars
+[ -z $TO ] && exit 1
+[ -z ${MESSAGE%% *} ] && exit 1
+
+SOURCE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+cd $SOURCE
+
+if [ ! -z $FROM ]; then
+  ./textsecure -to="$TO" -message="$FROM: ${MESSAGE}"
+else
+  ./textsecure -to="$TO" -message="${MESSAGE}"
+fi
