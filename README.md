@@ -1,6 +1,6 @@
 # TextSecure Gateway
 
-I have already wrote a basic _check_mk_ TextSecure notification plugin. But now, i nedded more clients to send messages and don't want to register multiple numbers. So this is a basic gateway which delivers messages for more via HTTP or SSH.
+I have already wrote a basic _check_mk_ TextSecure notification plugin. But now, i needed more clients to send messages and don't want to register multiple numbers. So this is a basic gateway which delivers messages via HTTP or SSH.
 
 ## Prerequisites
 
