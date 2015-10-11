@@ -42,7 +42,7 @@ curl --data "from=someone&to=account.from.your.textsecure.address.book.or.phone.
 Just needs a modified URL which points at your previously configured _cgi-bin_ directory. Example could be:
 
 ```
-curl --data "from=someone&to=account.from.your.textsecure.address.book.or.phone.number&message=\"this is your message\"" http(s)://yourserver.example.com/cgi-bin/textsecure-gateway/index.php
+curl --data "from=someone&to=account.from.your.textsecure.address.book.or.phone.number&message=\"this is your message\"" http(s)://yourserver.example.com/cgi-bin/textsecure-gateway/bin/textsecure-wrapper
 ```
 
 ### SSH
