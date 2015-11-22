@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPT=`basename ${BASH_SOURCE[0]}`
-ARGS=$(getopt --long "to:,message:,from:,attachment:" --options "" -n "$SCRIPT" -- "$@");
+ARGS=$(getopt --long "to:,message:,from:,attachment:,group:" --options "" -n "$SCRIPT" -- "$@");
 
 #Bad arguments
 if [ $? -ne 0 ];
@@ -21,6 +21,11 @@ while true; do
     --to)
           shift
           TO=$1
+          shift
+    ;;
+    --group)
+          shift
+          GROUP=$1
           shift
     ;;
     --message)
@@ -43,16 +48,32 @@ while true; do
   esac
 done
 
-# check vars
+## check vars
 [ -z $TO ] && exit 1
 [ -z ${MESSAGE%% *} ] && exit 1
 
+## change into textsecure directory
 SOURCE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
 cd $SOURCE
 
+## set extra options
+unset OPTS
+
+# attachment
+if [ ! -z $ATTACHMENT ]; then
+  OPTS="$OPTS -attachment=$ATTACHMENT"
+fi
+
+# group chat
+if [ ! -z $GROUP ]; then
+  OPTS="$OPTS -group=$GROUP"
+fi
+
+## send the message
+
 if [ ! -z $FROM ]; then
-  ./textsecure -to="$TO" -message="$FROM: ${MESSAGE}"
+  ./textsecure -to="$TO" -message="$FROM: ${MESSAGE}" $OPTS
 else
-  ./textsecure -to="$TO" -message="${MESSAGE}"
+  echo $OPTS >> /tmp/textsecure.log
+  ./textsecure -to="$TO" -message="${MESSAGE}" $OPTS
 fi
