@@ -50,3 +50,7 @@ curl --data "from=someone&to=account.from.your.signal.address.book.or.phone.numb
 ```
 ssh [-i /your/ssh/folder/id_rsa_or_so] user@yourserver /folder/to/signal-gateway/bin/signal-wrapper --from someone --to account.from.your.signal.address.book.or.phone.number --message \"this is your message\"
 ```
+
+## Group Chat
+
+You need to set the hexid (see _.storage/groups/${hexid}_) of the group as ```--to``` and ```--group true```.
