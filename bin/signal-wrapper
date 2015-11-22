@@ -52,7 +52,7 @@ done
 [ -z $TO ] && exit 1
 [ -z ${MESSAGE%% *} ] && exit 1
 
-## change into textsecure directory
+## change into signal directory
 SOURCE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $SOURCE
 
@@ -74,6 +74,5 @@ fi
 if [ ! -z $FROM ]; then
   ./textsecure -to="$TO" -message="$FROM: ${MESSAGE}" $OPTS
 else
-  echo $OPTS >> /tmp/textsecure.log
   ./textsecure -to="$TO" -message="${MESSAGE}" $OPTS
 fi
