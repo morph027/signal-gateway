@@ -9,8 +9,7 @@ signal_send() {
   local TO="$1"
   local MESSAGE="$2"
   local OPTS="$3"
-  logger "sending signal message \"$MESSAGE\" to $TO ($OPTS)"
-  ./textsecure -to="$TO" -message="${MESSAGE}" $OPTS
+  ./signal -to="$TO" -message="${MESSAGE}" $OPTS
 }
 
 #Bad arguments
@@ -94,7 +93,7 @@ if [ ! -z $QUEUE ]; then
   if [ $(curl -sLk -m 5 -w "%{http_code}\\n" https://textsecure-service.whispersystems.org:443/v1/ -o /dev/null) != "000" ] ; then
     signal_send $TO "$MESSAGE" "$OPTS"
   else
-    logger "unable to send signal message \"$MESSAGE\" to $TO ($OPTS), adding to queue..."
+    logger "unable to send signal message, adding to queue..."
     mkdir -p queue
     echo "$MESSAGE" >> queue/${TO}
   fi
