@@ -1,0 +1,15 @@
+#!/bin/bash
+
+## change into signal directory
+SOURCE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd $SOURCE
+
+for RECIPIENT in $(ls queue)
+do
+  while read MESSAGE
+  do
+    logger "re-sending \"$MESSAGE\" to $RECIPIENT"
+    ./textsecure -to=$RECIPIENT -message="queued: $MESSAGE"
+    sed -i '/^'"$MESSAGE"'/d' queue/$RECIPIENT
+  done < queue/$(echo $RECIPIENT)
+done

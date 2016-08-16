@@ -1,7 +1,17 @@
 #!/bin/bash
 
 SCRIPT=`basename ${BASH_SOURCE[0]}`
-ARGS=$(getopt --long "to:,message:,from:,attachment:,group:" --options "" -n "$SCRIPT" -- "$@");
+ARGS=$(getopt --long "to:,message:,from:,attachment:,group:,queue" --options "" -n "$SCRIPT" -- "$@");
+
+unset QUEUE
+
+signal_send() {
+  local TO="$1"
+  local MESSAGE="$2"
+  local OPTS="$3"
+  logger "sending signal message \"$MESSAGE\" to $TO ($OPTS)"
+  ./textsecure -to="$TO" -message="${MESSAGE}" $OPTS
+}
 
 #Bad arguments
 if [ $? -ne 0 ];
@@ -38,6 +48,10 @@ while true; do
           ATTACHMENT=$1
           shift
     ;;
+    --queue)
+          shift
+          QUEUE="true"
+    ;;
     --)
       shift
       break
@@ -69,10 +83,21 @@ if [ ! -z $GROUP ]; then
   OPTS="$OPTS -group=$GROUP"
 fi
 
+# check for sender
+if [ ! -z $FROM ]; then
+  MESSAGE="$FROM: $MESSAGE"
+fi
+
 ## send the message
 
-if [ ! -z $FROM ]; then
-  ./textsecure -to="$TO" -message="$FROM: ${MESSAGE}" $OPTS
+if [ ! -z $QUEUE ]; then
+  if [ $(curl -sLk -m 5 -w "%{http_code}\\n" https://textsecure-service.whispersystems.org:443/v1/ -o /dev/null) != "000" ] ; then
+    signal_send $TO "$MESSAGE" "$OPTS"
+  else
+    logger "unable to send signal message \"$MESSAGE\" to $TO ($OPTS), adding to queue..."
+    mkdir -p queue
+    echo "$MESSAGE" >> queue/${TO}
+  fi
 else
-  ./textsecure -to="$TO" -message="${MESSAGE}" $OPTS
+  signal_send $TO "$MESSAGE" "$OPTS"
 fi

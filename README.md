@@ -54,3 +54,9 @@ ssh [-i /your/ssh/folder/id_rsa_or_so] user@yourserver /folder/to/signal-gateway
 ## Group Chat
 
 You need to set the hexid (see _.storage/groups/${hexid}_) of the group as ```--to``` and ```--group true```.
+
+## Queuing
+
+To add messages to s simple queue (in case of internet failures), you can pass ```--queue```. Basically, the messages will be added to a text file which will then be read by a script later (e.g. fired by cron).
+
+Cron:  ```crontab -u user -e``` and then add ```*/5 * * * * /folder/to/signal-gateway/bin/signal-resend```
