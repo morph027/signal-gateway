@@ -9,7 +9,7 @@ do
   while read MESSAGE
   do
     logger "re-sending \"$MESSAGE\" to $RECIPIENT"
-    ./textsecure -to=$RECIPIENT -message="queued: $MESSAGE"
+    ./signal -to=$RECIPIENT -message="queued: $MESSAGE"
     sed -i '/^'"$MESSAGE"'/d' queue/$RECIPIENT
   done < queue/$(echo $RECIPIENT)
 done
