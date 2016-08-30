@@ -10,6 +10,7 @@ do
   do
     logger "re-sending \"$MESSAGE\" to $RECIPIENT"
     ./signal -to=$RECIPIENT -message="queued: $MESSAGE"
-    sed -i '/^'"$MESSAGE"'/d' queue/$RECIPIENT
+    REGEX=$(printf '%q' "$MESSAGE")
+    sed -i '/^'"$REGEX"'/d' queue/$RECIPIENT
   done < queue/$(echo $RECIPIENT)
 done
