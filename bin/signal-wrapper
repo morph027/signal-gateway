@@ -95,7 +95,9 @@ if [ ! -z $QUEUE ]; then
   else
     logger "unable to send signal message, adding to queue..."
     mkdir -p queue
-    echo "$MESSAGE" >> queue/${TO}
+    UUID=$(cat /proc/sys/kernel/random/uuid)
+    echo "TO=\"$TO\"" > queue/$UUID
+    echo "MESSAGE=\"$MESSAGE\"" >> queue/$UUID
   fi
 else
   signal_send $TO "$MESSAGE" "$OPTS"

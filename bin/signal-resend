@@ -4,13 +4,12 @@
 SOURCE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $SOURCE
 
-for RECIPIENT in $(ls queue)
+for QUEUE_ITEM in $(ls queue)
 do
-  while read MESSAGE
-  do
-    logger "re-sending \"$MESSAGE\" to $RECIPIENT"
-    ./signal -to=$RECIPIENT -message="queued: $MESSAGE"
-    REGEX=$(printf '%q' "$MESSAGE")
-    sed -i '/^'"$REGEX"'/d' queue/$RECIPIENT
-  done < queue/$(echo $RECIPIENT)
+  . queue/$QUEUE_ITEM
+  echo $MESSAGE
+  echo $TO
+  logger "re-sending \"$MESSAGE\" to $TO"
+  ./signal -to=$TO -message="queued: $MESSAGE"
+  rm -f queue/$QUEUE_ITEM
 done
