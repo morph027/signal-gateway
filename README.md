@@ -4,7 +4,7 @@ I have already wrote a basic _check_mk_ Signal notification plugin. But now, i n
 
 ## Prerequisites
 
-Go and get [janimo's](https://github.com/janimo/signal) Signal client. Check his wiki on how to get a working binary.
+Go and get [janimo's](https://github.com/janimo/textsecure) Textsecure client. Check his wiki on how to get a working binary.
 
 ## Setup
 
