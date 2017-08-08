@@ -1,4 +1,8 @@
-# Signal (former TextSecure) Gateway
+Now, there's also a dockerized [Signal Web Gateway](https://gitlab.com/morph027/signal-web-gateway)
+
+---
+
+# Signal SSH Gateway
 
 I have already wrote a basic _check_mk_ Signal notification plugin. But now, i needed more clients to send messages and don't want to register multiple numbers. So this is a basic gateway which delivers messages via SSH.
 
