@@ -1,7 +1,7 @@
 #!/bin/bash
 
-SCRIPT=`basename ${BASH_SOURCE[0]}`
-ARGS=$(getopt --long "to:,message:,from:,attachment:,group:,queue" --options "" -n "$SCRIPT" -- "$@");
+SCRIPT=$(basename ${BASH_SOURCE[0]})
+ARGS=$(getopt --long "to:,message:,from:,attachment:,queue" --options "" -n "$SCRIPT" -- "$@");
 
 unset QUEUE
 
@@ -30,11 +30,6 @@ while true; do
     --to)
           shift
           TO=$1
-          shift
-    ;;
-    --group)
-          shift
-          GROUP=$1
           shift
     ;;
     --message)
@@ -77,8 +72,8 @@ if [ ! -z $ATTACHMENT ]; then
   OPTS="$OPTS -attachment=$ATTACHMENT"
 fi
 
-# group chat
-if [ ! -z $GROUP ]; then
+# is group message?
+if [[ $TO =~ ^[0-9a-z]{32}$ ]]; then
   OPTS="$OPTS -group=$GROUP"
 fi
 
